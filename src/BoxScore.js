@@ -6,8 +6,8 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import CardMedia from '@mui/material/CardMedia';
-import purdueLogo from './purdue_logo.png';
 import Grid from '@mui/material/Grid';
+import purdueLogo from './purdue_logo.png';
 
 const card = (
   <Card sx={{ maxWidth: 345 }}>
@@ -32,10 +32,16 @@ const card = (
             </Card>
 );
 
-export default function OutlinedCard() {
+export default function BoxScore(props) {
   return (
-    <Box sx={{ minWidth: 275 }}>
-      <Card variant="outlined">{card}</Card>
-    </Box>
+    <div className="card">
+         <div className="card__body">
+            <img style={{width:"260px", height:"250px"}} src= {props.img} class="card__image"/>
+            <h2 style={{textAlign:"center"}} className="card__title"> {props.title}</h2>
+            <p className="card__description"> {props.description}
+            </p>
+         </div>
+        <button className="card__btn"> Details</button>
+    </div>
   );
 }

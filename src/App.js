@@ -22,25 +22,7 @@ import stevenPlockerSurprise from './Steven_Plocker_Surprise.png';
 import * as React from 'react';
 import './App.css';
 import { useFetch } from "react-async";
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid';
-import { styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
 import BoxScore from './BoxScore';
-import { makeStyle } from '@mui/core/styles';
-
-const useStyles = makeStyles({
-    boxScoreContainer: {
-        paddingTop: '20px',
-        paddingLeft: '50px'
-    }
-})
 
 // To be replaced by the endpoint of the API deployed through the CloudFormation Template
 /*const APIEndPoint = 'https://gnnktks9vh.execute-api.us-east-1.amazonaws.com/v1/hello' */
@@ -57,9 +39,8 @@ const useStyles = makeStyles({
 
 
 function App() {
-  const classes = useStyles()
   return (
-    <div> {/*
+    <div>
         <div className="App">
             <header className="App-header">
               <p> Hello fellow degenerates </p>
@@ -69,19 +50,27 @@ function App() {
             <div className="logos">
                 <img src={bobbyPetrinoBliss} className="App-logoR2L" alt="logo S3" />
                 <img src={muschampGrimace} className="App-logoL2R" alt="logo CloudFront" />
+        </div>
+        </div>
 
+        <div className="outer_card__wrapper">
+        {/*<h2 style={{textAlign:"center"}}> Purdue vs Michigan </h2>*/}
+
+            <div className="sub_card__wrapper">
+
+                <BoxScore img="http://a.espncdn.com/i/teamlogos/ncaa/500-dark/2509.png"
+                          title="Away: Purdue"
+                          description = "Stats and Betting Lines"/>
+                <BoxScore img="http://a.espncdn.com/i/teamlogos/ncaa/500-dark/130.png"
+                          title="Home: Michigan"
+                          description = "Stats and Betting Lines"/>
             </div>
-        </div> */}
-        {<Grid container spacing={2} className={classes.boxScoreContainer}>
-            <Grid item xs={4}>
-                this is item 1
-                {/*<BoxScore/>*/}
-            </Grid>
-            <Grid item xs={4}>
-                this is item 2
-                {/*<BoxScore/>*/}
-            </Grid>
-        </Grid>}
+
+            {/*<p style={{textAlign:"center"}}>Game summary section </p>*/}
+        </div>
+
+
+
     </div>
 
   );
