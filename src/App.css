@@ -1,4 +1,7 @@
+
+
 /* border radius */
+{/*
 $radius: 0.2rem;
 
 *,
@@ -79,7 +82,7 @@ $radius: 0.2rem;
     color:white;
     }
 }
-
+*/}
 .App {
   text-align: center;
   font-size: calc(10px + 2vmin);
