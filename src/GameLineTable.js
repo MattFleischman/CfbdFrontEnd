@@ -101,7 +101,7 @@ export default function GameLineTable(props) {
   const fetchGameLines = async (week) => {
     console.log(`fetching game prediction results for week: ${week}`)
     const response = await axios
-      .get(`https://txm0cfndf9.execute-api.us-east-1.amazonaws.com/Prod/prediction_output?week=${week}`)
+      .get(`https://f8f9t7ilzf.execute-api.us-east-1.amazonaws.com/Prod/prediction_output?week=${week}`)
       .catch((err) => console.log(err));
     if (response) {
       const GameLines = response.data;
