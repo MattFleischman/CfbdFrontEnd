@@ -13,23 +13,55 @@ $radius: 0.2rem;
  margin:6rem
  }
 .outer_card__wrapper{
-        display: grid;
+    display: grid;
     grid-template-columns: repeat(auto-fit, minmax(25rem, 35rem));
     gap: 1rem;
     margin: 8rem;
     justify-content: center;
-    background: white;
+    background: #282c34;
 }
 .outer_card__wrapper > div {
-      background-color: white;
+      background-color: #282c34;
       padding: 2px;
     }
 
 .sub_card__wrapper{
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(12rem, 16rem));
+    background: #282c34;
+    grid-template-columns: repeat(auto-fit, minmax(10rem, 16rem));
     gap: 1rem;
     justify-content: center;
+}
+
+.simple_game__wrapper{
+  background-color: #282c34;
+  padding: 2px;
+}
+
+.simple_game__summary{
+    margin-left: .75rem;
+    margin-right: .75rem;
+    margin-top: .25rem;
+}
+
+.comparison_button_container{
+    display: flex;
+    justify-content: space-around;
+
+}
+
+.game_detail__button{
+    margin-left: .2rem;
+    margin-right: .75rem;
+    margin-top: .25rem;
+    text-align: right;
+}
+
+.place_conjecture__button{
+    margin-left: .75rem;
+    margin-right: .75rem;
+    margin-top: .25rem;
+    text-align: left;
 }
 
 .card{
@@ -83,7 +115,7 @@ $radius: 0.2rem;
 .App {
   text-align: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: #c9e1dc;
 }
 
 .App-MainLogo {
@@ -123,6 +155,7 @@ $radius: 0.2rem;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  background-color: #282c34;
 }
 
 .logos {

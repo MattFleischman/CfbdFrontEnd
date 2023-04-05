@@ -19,26 +19,27 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 import bobbyPetrinoBliss from './bobby_petrino_bliss.png';
 import muschampGrimace from './muschamp_grimace.png';
 import stevenPlockerSurprise from './Steven_Plocker_Surprise.png';
-import * as React from 'react';
+import {useState} from 'react';
 import './App.css';
-import { useFetch } from "react-async";
-import BoxScore from './BoxScore';
+import MatchUpGroups from './card_components/MatchUpGroups';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import {weekOptions} from "./Utilities/Constants";
+import { purple } from "@mui/material/colors";
 
-// To be replaced by the endpoint of the API deployed through the CloudFormation Template
-/*const APIEndPoint = 'https://gnnktks9vh.execute-api.us-east-1.amazonaws.com/v1/hello' */
-
-/*const APIResult = () => {
-  const { data, error } = useFetch(APIEndPoint, {
-    headers: { accept: "application/json" },
-  })
-  if (error) return <p>{error.message}</p>
-  if (data) return <p>{data.message}</p>
-  return null
-}
-*/
-
+//import weekOptions from './Utilities/Constants';
 
 function App() {
+    const {weekOptions} = require('./Utilities/Constants')
+
+     const [weekValue, setWeekValue] = useState("13")
+    const weekChange = (e) => {
+        console.log("Week Selected: " + e.target.value);
+        setWeekValue(e.target.value);
+        };
+
   return (
     <div>
         <div className="App">
@@ -50,25 +51,34 @@ function App() {
             <div className="logos">
                 <img src={bobbyPetrinoBliss} className="App-logoR2L" alt="logo S3" />
                 <img src={muschampGrimace} className="App-logoL2R" alt="logo CloudFront" />
-        </div>
-        </div>
-
-        <div className="outer_card__wrapper">
-        {/*<h2 style={{textAlign:"center"}}> Purdue vs Michigan </h2>*/}
-
-            <div className="sub_card__wrapper">
-
-                <BoxScore img="http://a.espncdn.com/i/teamlogos/ncaa/500-dark/2509.png"
-                          title="Away: Purdue"
-                          description = "Stats and Betting Lines"/>
-                <BoxScore img="http://a.espncdn.com/i/teamlogos/ncaa/500-dark/130.png"
-                          title="Home: Michigan"
-                          description = "Stats and Betting Lines"/>
+            </div>
+            <div>
+                  <FormControl sx={{
+                              m: 1,
+                              minWidth: 120,
+                              borderRadius: '10px',
+                              backgroundColor: "#c9e1dc"
+                              }}
+                              size="medium">
+                 <Select
+                    labelId="demo-select-small"
+                    id="week-select"
+                    value={weekValue}
+                    label="Week"
+                    onChange={weekChange}
+                  >
+                      {weekOptions.map((option) => (
+                      <MenuItem value={option.value}>{option.label}</MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
             </div>
 
-            {/*<p style={{textAlign:"center"}}>Game summary section </p>*/}
         </div>
 
+        <MatchUpGroups
+            week = {weekValue}
+        />
 
 
     </div>
