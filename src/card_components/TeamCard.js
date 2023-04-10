@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography';
 
 export default function TeamCard(props) {
   return (
-      <Card sx={{ maxWidth: 380,
+      <Card sx={{ maxWidth: props.cardMaxWidth
       }}>
           <div
               style={{
@@ -22,18 +22,17 @@ export default function TeamCard(props) {
                   <CardMedia
                     component="img"
                      style={{
-                            width: "auto",
-                            maxHeight: 150
+                            maxwidth: "auto",
+                            maxHeight: props.mediaMaxHeight
                           }}
                     image={props.img}
                     title="team image"
                   />
           </div>
-          <CardContent>
+          <CardContent sx={{padding: .5}}>
            <Typography
-               gutterBottom
                align="center"
-               variant="h6"
+               variant="h7"
                component="div"
                >
                 {props.title}

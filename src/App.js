@@ -21,7 +21,8 @@ import muschampGrimace from './muschamp_grimace.png';
 import stevenPlockerSurprise from './Steven_Plocker_Surprise.png';
 import {useState} from 'react';
 import './App.css';
-import MatchUpGroups from './card_components/MatchUpGroups';
+import GroupingWrapper from './card_components/GroupingWrapper';
+import AppBarHeader from './AppBarHeader';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -43,11 +44,12 @@ function App() {
   return (
     <div>
         <div className="App">
+            <AppBarHeader/>
             <header className="App-header">
-              <p> Hello fellow degenerates </p>
+              <h1> Hello fellow degenerates </h1>
               <img src={stevenPlockerSurprise} className="App-MainLogo" alt="logo" />
             </header>
-            <p>Welcome to OldSpruceTree&apos;s College Football Score Predictor <br/> Pick a match-up below to predict scores </p>
+            <h3>Welcome to OldSpruceTree&apos;s College Football Score Predictor <br/> Pick a match-up below to predict scores </h3>
             <div className="logos">
                 <img src={bobbyPetrinoBliss} className="App-logoR2L" alt="logo S3" />
                 <img src={muschampGrimace} className="App-logoL2R" alt="logo CloudFront" />
@@ -76,7 +78,7 @@ function App() {
 
         </div>
 
-        <MatchUpGroups
+        <GroupingWrapper
             week = {weekValue}
         />
 

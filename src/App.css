@@ -1,7 +1,7 @@
 
 
 /* border radius */
-{/*
+
 $radius: 0.2rem;
 
 *,
@@ -17,10 +17,11 @@ $radius: 0.2rem;
  }
 .outer_card__wrapper{
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(25rem, 35rem));
-    gap: 1rem;
-    margin: 8rem;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 22rem));
+    gap: 3rem;
+    margin-lower: 10rem;
     justify-content: center;
+
     background: #282c34;
 }
 .outer_card__wrapper > div {
@@ -31,8 +32,8 @@ $radius: 0.2rem;
 .sub_card__wrapper{
     display: grid;
     background: #282c34;
-    grid-template-columns: repeat(auto-fit, minmax(10rem, 16rem));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(5rem, 10rem));
+    {/*gap: 1rem;*/}
     justify-content: center;
 }
 
@@ -42,30 +43,26 @@ $radius: 0.2rem;
 }
 
 .simple_game__summary{
-    margin-left: .75rem;
-    margin-right: .75rem;
     margin-top: .25rem;
+}
+
+.matchup_spinner__wrapper{
+    display: flex;
+    margin: 5rem;
+    justify-content: center;
+
+
 }
 
 .comparison_button_container{
     display: flex;
-    justify-content: space-around;
-
+    gap: .75rem;
+    text-align: center;
+    justify-content: left;
+    flex-wrap: wrap;
+    margin: .5rem;
 }
 
-.game_detail__button{
-    margin-left: .2rem;
-    margin-right: .75rem;
-    margin-top: .25rem;
-    text-align: right;
-}
-
-.place_conjecture__button{
-    margin-left: .75rem;
-    margin-right: .75rem;
-    margin-top: .25rem;
-    text-align: left;
-}
 
 .card{
     overflow: hidden;
@@ -114,7 +111,7 @@ $radius: 0.2rem;
     color:white;
     }
 }
-*/}
+
 .App {
   text-align: center;
   font-size: calc(10px + 2vmin);
@@ -122,36 +119,48 @@ $radius: 0.2rem;
 }
 
 .App-MainLogo {
-  height: 10vmin;
+  height: 20rem;
+  margin: 4.5rem;
 }
 
 .App-logoL2R {
-  height: 20vmin;
+  height: 25vmin;
+  width: 40vmin;
   pointer-events: none;
+  margin-top: 1rem;
+  margin-left: 12rem;
+  text-align: left;
 }
 
 .App-logoR2L {
-  height: 20vmin;
+  height: 25vmin;
+  width: 40vmin;
   pointer-events: none;
+  margin-top: 1rem;
+  margin-right: 12rem;
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .App-MainLogo {
-    animation: zoom-in-zoom-out infinite 3s linear;
+    animation: zoom-in-zoom-out infinite 30s linear;
+    animation-delay: 2s;
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
+{/*@media (prefers-reduced-motion: no-preference) {
   .App-logoL2R {
-    animation: Logo-spinL2R infinite 5s ease-in-out;
+    animation: Logo-spinL2R infinite 10s ease-in-out;
+    animation-delay: 2s;
   }
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logoR2L {
-    animation: Logo-spinR2L infinite 5s ease-in-out;
+    animation: Logo-spinR2L infinite 10s ease-in-out;
+    animation-delay: 2s;
   }
 }
+*/}
 .App-header {
   min-height: 21vmin;
   display: flex;
@@ -159,6 +168,7 @@ $radius: 0.2rem;
   align-items: center;
   justify-content: center;
   background-color: #282c34;
+  color: #c9e1dc;
 }
 
 .logos {
