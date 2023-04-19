@@ -58,6 +58,7 @@ export default function TeamComparison(props) {
             }
         ]
 
+
     return(
         <div className="simple_game__wrapper">
             <div className="sub_card__wrapper">

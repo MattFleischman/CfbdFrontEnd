@@ -1,92 +1,77 @@
-/*
-** React CORS friendly Single Page Application - https://github.com/aws-samples/react-cors-spa 
-Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
-documentation files (the "Software"), to deal in the Software without restriction, including without limitation
-the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
-and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of
-the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
 
 import bobbyPetrinoBliss from './bobby_petrino_bliss.png';
 import muschampGrimace from './muschamp_grimace.png';
 import stevenPlockerSurprise from './Steven_Plocker_Surprise.png';
-import {useState} from 'react';
+import audio_intro from './audio_intro.mp3';
+import React from "react";
+import { useState, useEffect } from 'react';
 import './App.css';
-import GroupingWrapper from './card_components/GroupingWrapper';
-import AppBarHeader from './AppBarHeader';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
+import AppHeader from './AppHeader';
+import { Navigate } from "react-router-dom";
 import Select from '@mui/material/Select';
-import {weekOptions} from "./Utilities/Constants";
-import { purple } from "@mui/material/colors";
+import Backdrop from '@mui/material/Backdrop';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+
 
 //import weekOptions from './Utilities/Constants';
 
 function App() {
     const {weekOptions} = require('./Utilities/Constants')
+    const [weekValue, setWeekValue] = useState("13")
+    const [isShowingAlert, setShowingAlert] = React.useState(true);
+    const [homeAuthenticated, setHomeAuthenticated] = useState(false);
 
-     const [weekValue, setWeekValue] = useState("13")
-    const weekChange = (e) => {
-        console.log("Week Selected: " + e.target.value);
-        setWeekValue(e.target.value);
-        };
 
-  return (
-    <div>
-        <div className="App">
-            <AppBarHeader/>
-            <header className="App-header">
-              <h1> Hello fellow degenerates </h1>
-              <img src={stevenPlockerSurprise} className="App-MainLogo" alt="logo" />
-            </header>
-            <h3>Welcome to OldSpruceTree&apos;s College Football Score Predictor <br/> Pick a match-up below to predict scores </h3>
-            <div className="logos">
-                <img src={bobbyPetrinoBliss} className="App-logoR2L" alt="logo S3" />
-                <img src={muschampGrimace} className="App-logoL2R" alt="logo CloudFront" />
-            </div>
-            <div>
-                  <FormControl sx={{
-                              m: 1,
-                              minWidth: 120,
-                              borderRadius: '10px',
-                              backgroundColor: "#c9e1dc"
-                              }}
-                              size="medium">
-                 <Select
-                    labelId="demo-select-small"
-                    id="week-select"
-                    value={weekValue}
-                    label="Week"
-                    onChange={weekChange}
+      function playIntroAudio() {
+      setShowingAlert(false)
+      new Audio(audio_intro).play()
+      }
+    //TODO: Need to enable sign out and check when the login token expires
+  console.log("starting app")
+  console.log(`login name: ${localStorage.getItem("loginName")}`)
+  if (!localStorage.getItem("authenticated")) {
+      console.log(`homeAuthenticated: ${localStorage.getItem("authenticated")}`)
+    return <Navigate replace to="/login" />;
+  } else {
+    console.log(`homeAuthenticated: ${localStorage.getItem("authenticated")}`)
+    return (
+      <div>
+          <div className="App">
+              <AppHeader
+                    userImage={localStorage.getItem("userImage")}
+                    userName={localStorage.getItem("loginName")}
+                    >
+
+              </AppHeader>
+              <header className="App-header">
+                <h1> Hello fellow degenerates </h1>
+                {isShowingAlert &&
+                  <Backdrop
+                    sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                    open={isShowingAlert}
                   >
-                      {weekOptions.map((option) => (
-                      <MenuItem value={option.value}>{option.label}</MenuItem>
-                      ))}
-                  </Select>
-                </FormControl>
-            </div>
-
-        </div>
-
-        <GroupingWrapper
-            week = {weekValue}
-        />
-
-
-    </div>
-
-  );
-}
+                  <Alert onClose={playIntroAudio} sx={{textAlign: 'left'}} severity="warning">
+                    <AlertTitle sx={{textAlign: 'center'}}>Take it easy {localStorage.getItem("loginName").split(" ")[0]}</AlertTitle>
+                      This site is still under construction.
+                      <br/>For a pre-alpha taste turn sound on and play around.
+                      <br/>IDK, maybe place a couple conjectures, I can't track you down... for now.
+                      <br/><br/>Also please no DoS attacks :)
+                      </Alert>
+                  </Backdrop>
+                  }
+                <img src={stevenPlockerSurprise} className="App-MainLogo" alt="logo" />
+              </header>
+              <h3>Welcome to OldSpruceTree&apos;s College Football Score Predictor <br/> Pick a match-up below to predict scores </h3>
+              <div className="logos">
+                  <img src={bobbyPetrinoBliss} className="App-logoR2L" alt="logo S3" />
+                  <img src={muschampGrimace} className="App-logoL2R" alt="logo CloudFront" />
+              </div>
+          </div>
+      </div>
+     );
+    }
+  };
 
 
 

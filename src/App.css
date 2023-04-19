@@ -15,12 +15,17 @@ $radius: 0.2rem;
  font-family: Oxygen, sans-serf;
  margin:6rem
  }
-.outer_card__wrapper{
+ .outer_card__wrapper{
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(15rem, 22rem));
-    gap: 3rem;
-    margin-lower: 10rem;
+    width: 1200px;
+    /*flex-direction: row;
+    margin: 5rem;
     justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(30rem, 40rem));
+    gap: 3rem;
+    margin-lower: 10rem;*/
+    justify-content: left;
 
     background: #282c34;
 }
@@ -28,6 +33,10 @@ $radius: 0.2rem;
       background-color: #282c34;
       padding: 2px;
     }
+
+.conferenceGroup {
+    margin: 2rem;
+}
 
 .sub_card__wrapper{
     display: grid;
@@ -110,6 +119,14 @@ $radius: 0.2rem;
     background:$clr-primary;
     color:white;
     }
+}
+
+.login_container {
+  text-align: center;
+  align: center;
+  justify: center;
+  font-size: calc(10px + 2vmin);
+  color: #c9e1dc;
 }
 
 .App {

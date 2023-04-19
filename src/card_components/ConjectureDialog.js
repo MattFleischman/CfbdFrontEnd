@@ -14,6 +14,9 @@ import FormControl from '@mui/material/FormControl';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import RadioGroup from '@mui/material/RadioGroup';
+import Radio from '@mui/material/Radio';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -38,14 +41,18 @@ export default function ConjectureDialog(props) {
   const [requestSubmitted, setRequestSubmitted] = React.useState(false)
   const [source, setSource] = React.useState(null);
   const [conjectureType, setConjectureType] = React.useState(null);
-  const [wager, setWager] = React.useState(0);
+  const [conjecture, setConjecture] = React.useState(0);
+  const [conjectureDirection, setConjectureDirection] = React.useState(null);
   const [errorMessage, setErrorMessage] = React.useState(false);
   const [submitError, setSubmitError] = React.useState(false);
   const [placeConjectorResponse, setPlaceConjectorResponse] = useState({});
   const [isShowingAlert, setShowingAlert] = React.useState(false);
+  const [coverDirections, setCoverDirections] = React.useState(null);
+  const [beatDirections, setBeatDirections] = React.useState(null);
 
   const standardSpreads = props.spreadSummary[0]
   const ouSpreads = props.spreadSummary[1]
+  const overDirections = ["over","Over"]
 /*
   console.log(`showOst: ${showOst}`)
   console.log(`showVegas: ${showVegas}`)
@@ -71,9 +78,13 @@ export default function ConjectureDialog(props) {
     if (event.target.value == "Spread") {
         setShowSpread(true)
         setShowOU(false)
+        setCoverDirections(["cover","Cover"])
+        setBeatDirections(["beat","Beat"])
     } else {
         setShowSpread(false)
         setShowOU(true)
+        setCoverDirections(["over","Over"])
+        setBeatDirections(["under","Under"])
     }
   };
 
@@ -82,8 +93,11 @@ export default function ConjectureDialog(props) {
     setShowOU(true);
     setShowOst(true);
     setShowVegas(true);
-    setSubmitError(false)
-    setWager(0)
+    setSubmitError(false);
+    setCoverDirections(null);
+    setBeatDirections(null);
+    setConjectureDirection(null);
+    setConjecture(0);
     setConjectureType("");
     setSource("");
   }
@@ -97,22 +111,27 @@ export default function ConjectureDialog(props) {
     resetState()
   };
 
-  const handleWager = (event) => {
-    setWager(event.target.value);
+  const handleConjecture = (event) => {
+    setConjecture(event.target.value);
+  };
+
+  const handleConjectureDirection = (event) => {
+    setConjectureDirection(event.target.value);
   };
 
   const submitValidate = () => {
-       console.log(`conjectureType: ${conjectureType}`)
+       /*console.log(`conjectureType: ${conjectureType}`)
        console.log(`source: ${source}`)
-       console.log(`wager: ${wager}`)
-      if ((conjectureType == "") || (source == "")) {
+       console.log(`conjecture: ${conjecture}`)
+       console.log(`conjectureDirection: ${conjectureDirection}`)*/
+      if ((conjectureType == "") || (source == "") || (conjectureDirection === null)) {
           setSubmitError(true)
-          setErrorMessage("Spread type and Source need to be selected to submit. ")
+          setErrorMessage("Spread type, Source, and Conjecture Direction need to be selected to submit. ")
           return true
           }
-      else if (wager == "0") {
+      else if (conjecture == "0") {
         setSubmitError(true)
-        setErrorMessage("wager amount has to be greater than 0")
+        setErrorMessage("conjecture amount has to be greater than 0")
         return true
         }
         return false
@@ -147,7 +166,8 @@ export default function ConjectureDialog(props) {
                     user_id: "ostree",
                     conjecture_timestamp: now,
                     game_id: props.gameId,
-                    conjecture_amount: wager,
+                    conjecture_direction: conjectureDirection,
+                    conjecture_amount: conjecture,
                     conjecture_status: "Pending"
                     }
                     )
@@ -160,8 +180,6 @@ export default function ConjectureDialog(props) {
         return
     }
   };
-
-  console.log(`isShowingAlert: ${isShowingAlert}`)
 
   return (
     <div>
@@ -178,7 +196,7 @@ export default function ConjectureDialog(props) {
         <DialogContent>
           <DialogContentText>
             <Typography variant="h7" align="center">
-            Select the spread source and type to place a wager against
+            Select the spread source and type to place a conjecture on
             </Typography>
           </DialogContentText>
               <Box sx={{ maxWidth: 600, maxHeight: 400, margin: 2}}>
@@ -206,7 +224,6 @@ export default function ConjectureDialog(props) {
                  </Grid>
               </Grid>
               <Grid
-                    xs={4}
                     style={{ display: "flex", gap: "2rem"}}
                 >
                   <FormControl fullWidth>
@@ -267,18 +284,32 @@ export default function ConjectureDialog(props) {
                 </TableBody>
               </Table>
               </TableContainer>
-           <Box textAlign="center" sx={{ maxWidth: 400, margin: 2 }}>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            inputProps={{min: 0, style: { textAlign: 'center' }}}
-            label="Wager Amount"
-            type="number"
-            variant="standard"
-            defaultValue="0"
-            onChange={handleWager}
-          />
+           <Box textAlign="center" sx={{display: 'flex',
+                                       flexDirection: 'row',
+                                        justifyContent: 'space-around',
+                                        maxWidth: 400,
+                                        margin: 2 }}>
+              <TextField
+                autoFocus
+                margin="dense"
+                id="name"
+                inputProps={{min: 0, style: { width: 150, textAlign: 'center' }}}
+                label="Conjecture Amount"
+                type="number"
+                variant="standard"
+                defaultValue="0"
+                onChange={handleConjecture}
+              />
+              {((beatDirections != null) && (coverDirections != null)) &&
+              <RadioGroup
+                aria-labelledby="conjecture-direction-group-label"
+                name="conjecture-direction-group"
+                onChange={handleConjectureDirection}
+              >
+                <FormControlLabel value={coverDirections[0]} control={<Radio />} label={coverDirections[1]} />
+                <FormControlLabel value={beatDirections[0]} control={<Radio />} label={beatDirections[1]} />
+              </RadioGroup>
+              }
           </Box>
           {submitError &&
                 <Alert onClose={() => {setSubmitError(false)}} severity="error">
