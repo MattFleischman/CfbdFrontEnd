@@ -23,30 +23,26 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import AppHeader from '../AppHeader';
 
-function createData(name, calories, fat, carbs, protein) {
+function createData(id, timestamp, amount, source, type, baseline, direction, outcome) {
   return {
-    name,
-    calories,
-    fat,
-    carbs,
-    protein,
+    id,
+    timestamp,
+    amount,
+    source,
+    type,
+    baseline,
+    direction,
+    outcome
   };
 }
 
 const rows = [
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Donut', 452, 25.0, 51, 4.9),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-  createData('Honeycomb', 408, 3.2, 87, 6.5),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Jelly Bean', 375, 0.0, 94, 0.0),
-  createData('KitKat', 518, 26.0, 65, 7.0),
-  createData('Lollipop', 392, 0.2, 98, 0.0),
-  createData('Marshmallow', 318, 0, 81, 2.0),
-  createData('Nougat', 360, 19.0, 9, 37.0),
-  createData('Oreo', 437, 18.0, 63, 4.0),
+  createData(1000387, '2023-04-19Z12:55 32', 2, 'Vegas', 'O/U', 47, 'over', 'Pending'),
+  createData(1054613, '2023-04-19Z12:43 23', 4, 'Vegas', 'Spread', -10, 'cover', 'Pending'),
+  createData(1079454, '2023-04-19Z12:42 56', 1, 'Vegas', 'O/U', 55, 'under', 'Pending'),
+  createData(1077948, '2023-04-19Z12:41 36', 7, 'OSTree', 'O/U', 66, 'under', 'Pending'),
+  createData(1078945, '2023-04-19Z12:40 33', 4, 'Vegas', 'O/U', 47, 'over', 'Pending'),
+  createData(1084646, '2023-04-19Z12:39 68', 5, 'OSTree', 'O/U', 61, 'under', 'Pending'),
 ];
 
 function descendingComparator(a, b, orderBy) {
@@ -83,34 +79,52 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: 'name',
-    numeric: false,
+    id: 'id',
+    numeric: true,
     disablePadding: true,
-    label: 'Dessert (100g serving)',
+    label: 'Conjecture Id',
   },
   {
-    id: 'calories',
-    numeric: true,
+    id: 'timestamp',
+    numeric: false,
     disablePadding: false,
-    label: 'Calories',
+    label: 'Timestamp',
   },
   {
-    id: 'fat',
+    id: 'amount',
     numeric: true,
     disablePadding: false,
-    label: 'Fat (g)',
+    label: 'Amount',
   },
   {
-    id: 'carbs',
-    numeric: true,
+    id: 'source',
+    numeric: false,
     disablePadding: false,
-    label: 'Carbs (g)',
+    label: 'Baseline Source',
   },
   {
-    id: 'protein',
-    numeric: true,
+    id: 'type',
+    numeric: false,
     disablePadding: false,
-    label: 'Protein (g)',
+    label: 'Conjecture Type',
+  },
+  {
+    id: 'baseline',
+    numeric: false,
+    disablePadding: false,
+    label: 'Baseline Prediction',
+  },
+  {
+    id: 'direction',
+    numeric: false,
+    disablePadding: false,
+    label: 'Direction',
+  },
+  {
+    id: 'outcome',
+    numeric: false,
+    disablePadding: false,
+    label: 'Outcome',
   },
 ];
 
@@ -204,7 +218,7 @@ function EnhancedTableToolbar(props) {
           id="tableTitle"
           component="div"
         >
-          Nutrition
+          History
         </Typography>
       )}
 
@@ -365,7 +379,7 @@ export default function EnhancedTable() {
         <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer>
           <Table
-            sx={{ minWidth: 750 }}
+            sx={{ minWidth: 1200 }}
             aria-labelledby="tableTitle"
             size={dense ? 'small' : 'medium'}
           >
@@ -409,12 +423,15 @@ export default function EnhancedTable() {
                           scope="row"
                           padding="none"
                         >
-                          {row.name}
+                          {row.id}
                         </TableCell>
-                        <TableCell align="right">{row.calories}</TableCell>
-                        <TableCell align="right">{row.fat}</TableCell>
-                        <TableCell align="right">{row.carbs}</TableCell>
-                        <TableCell align="right">{row.protein}</TableCell>
+                        <TableCell align="right">{row.timestamp}</TableCell>
+                        <TableCell align="right">{row.amount}</TableCell>
+                        <TableCell align="right">{row.source}</TableCell>
+                        <TableCell align="right">{row.type}</TableCell>
+                        <TableCell align="right">{row.baseline}</TableCell>
+                        <TableCell align="right">{row.direction}</TableCell>
+                        <TableCell align="right">{row.outcome}</TableCell>
                       </TableRow>
                     );
                   })
