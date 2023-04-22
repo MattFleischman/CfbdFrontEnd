@@ -43,7 +43,7 @@ $radius: 0.2rem;
     background: #282c34;
     grid-template-columns: repeat(auto-fit, minmax(5rem, 10rem));
     {/*gap: 1rem;*/}
-    justify-content: center;
+    justify-content: left;
 }
 
 .simple_game__wrapper{
@@ -187,7 +187,10 @@ $radius: 0.2rem;
   background-color: #282c34;
   color: #c9e1dc;
 }
-
+.lexicon-table {
+    justify-content: center;
+    display: flex;
+}
 .logos {
   display: flex;
   justify-content: space-evenly;

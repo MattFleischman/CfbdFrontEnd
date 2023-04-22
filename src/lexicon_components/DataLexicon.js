@@ -8,16 +8,16 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import AppHeader from '../AppHeader';
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
+function createData(item, description) {
+  return { item, description };
 }
 
 const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
+  createData('Pred Score', 'The predicted score of a given matchup and/or point spread differential.'),
+  createData('Over/Under', 'The predicted total points scored in a given matchup.'),
+  createData('ELO', 'The team strength metric based on the tendancy of a team to either beat of lose to strong and week teams.'),
+  createData('Talent Rating', 'A cumulative value assigned to each team based on the average recruit/transfer in rating of the players on the roster that have played a snap in the current season.'),
+  createData('Conjecture', 'A user submitted points weighted guess on an outcome of a matchup.'),
 ];
 
 export default function DataLexicon() {
@@ -32,35 +32,31 @@ export default function DataLexicon() {
         <header className="App-header">
                 <h1> Data Lexicon </h1>
         </header>
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <div className="lexicon-table">
+        <TableContainer component={Paper} sx={{ minWidth: 650, maxWidth: 1200 }}>
+          <Table aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>Dessert (100g serving)</TableCell>
-                <TableCell align="right">Calories</TableCell>
-                <TableCell align="right">Fat&nbsp;(g)</TableCell>
-                <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-                <TableCell align="right">Protein&nbsp;(g)</TableCell>
+                <TableCell align="left" style={{fontWeight: "bold"}}>Data Item</TableCell>
+                <TableCell align="left" style={{fontWeight: "bold"}}>Description</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {rows.map((row) => (
                 <TableRow
-                  key={row.name}
+                  key={row.item}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">
-                    {row.name}
+                    {row.item}
                   </TableCell>
-                  <TableCell align="right">{row.calories}</TableCell>
-                  <TableCell align="right">{row.fat}</TableCell>
-                  <TableCell align="right">{row.carbs}</TableCell>
-                  <TableCell align="right">{row.protein}</TableCell>
+                  <TableCell align="left">{row.description}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </TableContainer>
+        </div>
     </div>
   );
 }
