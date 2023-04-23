@@ -9,6 +9,12 @@ import Typography from '@mui/material/Typography';
 
 
 export default function TeamCard(props) {
+    const CardContentNoPadding = styled(CardContent)(`
+      padding: 0;
+      &:last-child {
+        padding-bottom: 0;
+      }
+    `);
   return (
       <Card sx={{ maxWidth: props.cardMaxWidth
       }}>
@@ -23,13 +29,14 @@ export default function TeamCard(props) {
                     component="img"
                      style={{
                             maxwidth: "auto",
+                            minwidth: 30,
                             maxHeight: props.mediaMaxHeight
                           }}
                     image={props.img}
                     title="team image"
                   />
           </div>
-          <CardContent sx={{padding: .5}}>
+          <CardContentNoPadding sx={{paddingBottom: 1}}>
            <Typography
                align="center"
                variant="h7"
@@ -37,7 +44,7 @@ export default function TeamCard(props) {
                >
                 {props.title}
             </Typography>
-          </CardContent>
+          </CardContentNoPadding>
     </Card>
   );
 }
