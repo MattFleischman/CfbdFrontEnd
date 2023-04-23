@@ -13,6 +13,9 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import spruceTreeLogo from './spruceTreeLogo.jpg';
+import ProfileSettings from './ProfileSettings';
+import AccountSettings from './AccountSettings';
+import LogOut from './LogOut';
 import { Navigate } from "react-router-dom";
 
 const pages = ['Matchups', 'Conjecture History', 'Data Lexicon', 'Contact Us'];
@@ -25,12 +28,15 @@ export default function AppHeader(props) {
   const [navigate, setNavigate] = React.useState(false);
   const [navPath, setNavPath] = React.useState("");
   const [currentNav, setCurrentNav] = React.useState(props.currentNav);
+  const [settingDisplay, setSettingDisplay] = React.useState(null);
+  const [selectedDisplay, setSelectedDisplay] = React.useState(false);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
+
   };
 
   const handleCloseNavMenu = () => {
@@ -51,6 +57,20 @@ export default function AppHeader(props) {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const openProfileSetting = (setting) => {
+      console.log(`setting: ${setting}`)
+
+      const settingMapping = {"Profile": <ProfileSettings openDisp={true}></ProfileSettings>,
+                               "Account": <AccountSettings openDisp={true}></AccountSettings>,
+                               "Logout": <LogOut></LogOut>}
+
+       console.log(`settingMapping: ${settingMapping[setting]}`)
+      setSettingDisplay(settingMapping[setting])
+      setSelectedDisplay(true)
+
+      handleCloseUserMenu()
+  }
 
   if (navigate && (navPath != currentNav)) {
     return <Navigate replace to={navPath}/>;
@@ -169,10 +189,13 @@ export default function AppHeader(props) {
                   onClose={handleCloseUserMenu}
                 >
                   {settings.map((setting) => (
-                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                      <Typography textAlign="center">{setting}</Typography>
+                    <MenuItem key={setting} onClick={() => openProfileSetting(setting)}>
+                      <Typography textAlign="center" >{setting}</Typography>
                     </MenuItem>
                   ))}
+                {selectedDisplay &&
+                    [settingDisplay]
+                }
                 </Menu>
               </Box>
             </Toolbar>
