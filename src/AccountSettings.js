@@ -172,7 +172,7 @@ export default function AccountSettings(props) {
                 open={open}
                 onClose={handleClose}
             >
-                <DialogTitle>
+                <DialogTitle sx={{textAlign: 'center'}}>
                     Account Settings
                 </DialogTitle>
                 <DialogContent>
@@ -193,7 +193,7 @@ export default function AccountSettings(props) {
                                       display: 'flex',
                                       flexDirection: 'row',
                                       justifyContent: 'space-between',
-                                      maxWidth: 600,
+                                      maxWidth: 1000,
                                       padding: .5}}>
 
                                     <FormControl fullWidth>
@@ -251,7 +251,7 @@ export default function AccountSettings(props) {
                             maxWidth: 400,
                             padding: .5
                         }}>
-                            <Typography sx={{paddingTop: 2}}>Request Tokens:</Typography>
+                            <Typography sx={{paddingTop: 3}}>Request Tokens:</Typography>
                             <TextField
                                 autoFocus
                                 margin="dense"
