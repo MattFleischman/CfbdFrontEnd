@@ -5,6 +5,8 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import Backdrop from '@mui/material/Backdrop';
+import DeleteIcon from '@mui/icons-material/Delete';
 import Grid from "@mui/material/Grid";
 import TeamCard from "./card_components/TeamCard";
 import FormControl from "@mui/material/FormControl";
@@ -22,149 +24,105 @@ import Snackbar from "@mui/material/Snackbar";
 import * as React from "react";
 import {useState} from "react";
 import axios from "axios";
+import LogOut from "./LogOut";
+import {Navigate} from "react-router-dom";
 
 
 export default function ProfileSetting(props) {
   const [open, setOpen] = React.useState(true);
-  const [showOst, setShowOst] = React.useState(true);
-  const [showVegas, setShowVegas] = React.useState(true);
-  const [showOU, setShowOU] = React.useState(true);
-  const [showSpread, setShowSpread] = React.useState(true);
-  const [requestSubmitted, setRequestSubmitted] = React.useState(false)
-  const [source, setSource] = React.useState(null);
-  const [conjectureType, setConjectureType] = React.useState(null);
-  const [conjecture, setConjecture] = React.useState(0);
-  const [conjectureDirection, setConjectureDirection] = React.useState(null);
-  const [errorMessage, setErrorMessage] = React.useState(false);
+  const [requestSubmitted, setRequestSubmitted] = React.useState(false);
   const [submitError, setSubmitError] = React.useState(false);
-  const [placeConjectorResponse, setPlaceConjectorResponse] = useState({});
-  const [isShowingAlert, setShowingAlert] = React.useState(false);
-  const [coverDirections, setCoverDirections] = React.useState(null);
-  const [beatDirections, setBeatDirections] = React.useState(null);
+  const [errorMessage, setErrorMessage] = React.useState(null);
+  const [settingDisplay, setSettingDisplay] = React.useState(null);
+  const [selectedDisplay, setSelectedDisplay] = React.useState(false);
+  const [matchUpGrouping, setMatchUpGrouping] = React.useState("conference");
+  const [userEmail, setUserEmail] = React.useState(null);
+  const [settingUpdateResponse, setSettingUpdateResponse] = React.useState(null);
 
-  const overDirections = ["over","Over"]
-/*
-  console.log(`showOst: ${showOst}`)
-  console.log(`showVegas: ${showVegas}`)
-  console.log(`showOU: ${showOU}`)
-  console.log(`showSpread: ${showSpread}`)
-  console.log(`standardSpreads: ${standardSpreads}`)
-  console.log(`requestSubmitted: ${requestSubmitted}`)*/
-
-  const handleSourceChange = (event) => {
-    setSource(event.target.value);
-    if (event.target.value == "OSTree") {
-        setShowOst(true)
-        setShowVegas(false)
-    } else {
-        setShowOst(false)
-        setShowVegas(true)
-    }
-  };
-
-  const handleConjectureTypeChange = (event) => {
-    setConjectureType(event.target.value);
-    if (event.target.value == "Spread") {
-        setShowSpread(true)
-        setShowOU(false)
-        setCoverDirections(["cover","Cover"])
-        setBeatDirections(["beat","Beat"])
-    } else {
-        setShowSpread(false)
-        setShowOU(true)
-        setCoverDirections(["over","Over"])
-        setBeatDirections(["under","Under"])
-    }
-  };
+  React.useEffect( () => {
+   setOpen(props.openDisp)
+   console.log(`updated open settings`)
+  }, [props])
 
   const resetState = () => {
-    setShowSpread(true);
-    setShowOU(true);
-    setShowOst(true);
-    setShowVegas(true);
     setSubmitError(false);
-    setCoverDirections(null);
-    setBeatDirections(null);
-    setConjectureDirection(null);
-    setConjecture(0);
-    setConjectureType("");
-    setSource("");
+    setErrorMessage(null);
+    setSettingDisplay(null);
+    setSelectedDisplay(null);
+    setMatchUpGrouping("conference");
+    setSettingUpdateResponse(null);
+
   }
+  console.log(`requestSubmitted: ${requestSubmitted}`)
+
+  const validateEmail = (email) => {
+  return String(email)
+    .toLowerCase()
+    .match(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
+};
 
   const handleClose = () => {
     setOpen(false);
     resetState()
   };
 
-  const handleConjecture = (event) => {
-    setConjecture(event.target.value);
+  const handleEmail = (event) => {
+  setUserEmail(event.target.value)
+  }
+
+  const handleGroupingSelect = (event) => {
+  setMatchUpGrouping(event.target.value);
   };
 
-  const handleConjectureDirection = (event) => {
-    setConjectureDirection(event.target.value);
-  };
 
-  const submitValidate = () => {
-       /*console.log(`conjectureType: ${conjectureType}`)
-       console.log(`source: ${source}`)
-       console.log(`conjecture: ${conjecture}`)
-       console.log(`conjectureDirection: ${conjectureDirection}`)*/
-      if ((conjectureType == "") || (source == "") || (conjectureDirection === null)) {
-          setSubmitError(true)
-          setErrorMessage("Spread type, Source, and Conjecture Direction need to be selected to submit. ")
-          return true
-          }
-      else if (conjecture == "0") {
-        setSubmitError(true)
-        setErrorMessage("conjecture amount has to be greater than 0")
-        return true
-        }
-        return false
-    }
+  const postSettingUpdate = async (request) => {
+            console.log(`posting setting update: ${request}`)
 
-
-
-        const postConjecture = async (request) => {
-            console.log(`posting conjector: ${request}`)
-
-            const response = await axios
-                .post("https://u0dppkg69j.execute-api.us-east-1.amazonaws.com/prod/placedconjectures",
+           /* const response = await axios
+                .post("https://u0dppkg69j.execute-api.us-east-1.amazonaws.com/prod",
                     request
                 )
                 .catch((err) => console.log(err));
             if (response) {
-                const conjectureResponse = response.data;
+                const settingUpdateResponse = response.data;
 
-                console.log("conjectureResponse: ", conjectureResponse);
-                setPlaceConjectorResponse(conjectureResponse);
-            }
+                console.log("settingUpdateResponse: ", settingUpdateResponse);
+                setSettingUpdateResponse(settingUpdateResponse);
+            }*/
         };
 
   const handleSubmit = () => {
-    if (!submitValidate()) {
-        console.log(`submitError: ${submitError}`)
-        const now = new Date().toISOString()
-        console.log(`timestamp: ${now}`)
-        setOpen(false);
-        postConjecture(
-                    {
-                    user_id: "ostree",
-                    conjecture_timestamp: now,
-                    game_id: props.gameId,
-                    conjecture_direction: conjectureDirection,
-                    conjecture_amount: conjecture,
-                    conjecture_status: "Pending"
-                    }
-                    )
+    if (!emailRequestValidate(userEmail)) {
+        postSettingUpdate({
+                        user_email: userEmail,
+                        matchup_grouping: matchUpGrouping
+                        });
         setRequestSubmitted(true);
-        setShowingAlert(true);
+        console.log(`request submitted`)
         resetState();
-    //add in backend integration API
-    }
-    else {
+        }
+      else {
         return
     }
+
   };
+
+  const emailRequestValidate = (email) => {
+      console.log(`validate email: ${email}`)
+      if (validateEmail(email)) {
+        console.log(`passed email validation`)
+        return false
+        }
+      else {
+        console.log(`failed email validation`)
+        setSubmitError(true)
+        setErrorMessage("Email input has to be a valid email form")
+        return true
+        }
+    };
+
     return (
         <div>
             <Dialog
@@ -172,115 +130,104 @@ export default function ProfileSetting(props) {
                 onClose={handleClose}
             >
                 <DialogTitle>
-                    Create Conjecture
+                    Profile Settings
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
                         <Typography variant="h7" align="center">
-                            Select the spread source and type to place a conjecture on
+                            Review and update your account settings
                         </Typography>
                     </DialogContentText>
-                    <Box sx={{maxWidth: 600, maxHeight: 400, margin: 2}}>
-                        <Grid container
-                              spacing={1}
-                              direction="row"
-                              style={{
-                                  justifyContent: 'space-around',
-                                  marginBottom: 20,
-                                  marginTop: 10
-                              }}
-                        >
-                            <Grid item xs={4}>
-                            </Grid>
-                            <Grid item xs={4}>
-                            </Grid>
-                        </Grid>
-                        <Grid
-                            style={{display: "flex", gap: "2rem"}}
-                        >
-                            <FormControl fullWidth>
-                                <InputLabel id="demo-simple-select-label">source</InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    value={source}
-                                    label="Source"
-                                    onChange={handleSourceChange}
-                                >
-                                    <MenuItem value="Vegas">Vegas</MenuItem>
-                                    <MenuItem value="OSTree">OSTree</MenuItem>
-                                </Select>
-                            </FormControl>
+                    <Box sx={{marginTop: 2, minWidth: 400}}>
+                        <Box textAlign="center" sx={{
+                                  border: '1px solid grey',
+                                  marginBottom: 2,
+                                  }}>
+                            <Box sx={{marginTop: 1}}>
+                                <Typography variant="h7" align="center" sx={{fontStyle: "italic"}}>
+                                   Display
+                                </Typography>
+                            </Box>
+                            <Box textAlign="left" sx={{
+                                      display: 'flex',
+                                      flexDirection: 'row',
+                                      justifyContent: 'space-between',
+                                      maxWidth: 1000,
+                                      padding: .5}}>
 
-                            <FormControl fullWidth>
-                                <InputLabel id="demo-simple-select-label">Spread Type</InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    value={conjectureType}
-                                    label="Conjecture Type"
-                                    onChange={handleConjectureTypeChange}
-                                >
-                                    <MenuItem value="Spread">Spread</MenuItem>
-                                    <MenuItem value="Over/Under">Over/Under</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Grid>
+                                    <FormControl fullWidth>
+                                        <Typography sx={{paddingTop: 2}}>
+                                            MatchUp Grouping:
+                                        </Typography>
+                                    </FormControl>
+                                        <FormControl sx={{width: '60%'}}>
+                                          <InputLabel id="demo-simple-select-label">Age</InputLabel>
+                                          <Select
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value={matchUpGrouping}
+                                            label="Grouping"
+                                            onChange={handleGroupingSelect}
+                                          >
+                                            <MenuItem value={"conference"}>Conference</MenuItem>
+                                            <MenuItem value={"ouMargin"}>O/U Margin</MenuItem>
+                                          </Select>
+                                        </FormControl>
+
+                            </Box>
+                        </Box>
+                        <Box textAlign="center" sx={{
+                                  border: '1px solid grey',
+                                  marginBottom: 2
+                                  }}>
+                            <Box sx={{marginTop: 1}}>
+                                <Typography variant="h7" sx={{fontStyle: "italic"}}>
+                                   User Details
+                                </Typography>
+                            </Box>
+                        <Box textAlign="left" sx={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            maxWidth: 400,
+                            padding: .5
+                        }}>
+                            <Typography sx={{paddingTop: 2}}>
+                            Update Email Address:
+                            </Typography>
+                            <TextField
+                                   id="standard-basic"
+                                   variant="standard"
+                                   label="email"
+                                   defaultValue={userEmail}
+                                   onChange={handleEmail}
+                                   />
+                        </Box>
+
                     </Box>
-                    <Box textAlign="center" sx={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'space-around',
-                        maxWidth: 400,
-                        margin: 2
-                    }}>
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            id="name"
-                            inputProps={{min: 0, style: {width: 150, textAlign: 'center'}}}
-                            label="Conjecture Amount"
-                            type="number"
-                            variant="standard"
-                            defaultValue="0"
-                            onChange={handleConjecture}
-                        />
-                        {((beatDirections != null) && (coverDirections != null)) &&
-                            <RadioGroup
-                                aria-labelledby="conjecture-direction-group-label"
-                                name="conjecture-direction-group"
-                                onChange={handleConjectureDirection}
-                            >
-                                <FormControlLabel value={coverDirections[0]} control={<Radio/>}
-                                                  label={coverDirections[1]}/>
-                                <FormControlLabel value={beatDirections[0]} control={<Radio/>}
-                                                  label={beatDirections[1]}/>
-                            </RadioGroup>
+                        {submitError &&
+                            <Alert onClose={() => {setSubmitError(false)}} severity="error">
+                              <AlertTitle>Error</AlertTitle>
+                                {errorMessage}
+                                </Alert>
                         }
                     </Box>
-                    {submitError &&
-                        <Alert onClose={() => {
-                            setSubmitError(false)
-                        }} severity="error">
-                            <AlertTitle>Error</AlertTitle>
-                            {errorMessage}
-                        </Alert>
-                    }
+                 <Snackbar open={requestSubmitted}
+                          autoHideDuration={3000}
+                          onClose={() => {setRequestSubmitted(false)}}
+                          anchorOrigin={{vertical: 'bottom', horizontal: 'right' }}>
+                    <Alert onClose={() => {
+                        setRequestSubmitted(false)
+                    }} severity="success" sx={{width: '100%'}}>
+                        Your Settings have been updated!
+                    </Alert>
+            </Snackbar>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={handleSubmit}>Place Conjecture</Button>
+                    <Button onClick={handleSubmit}>Update Settings</Button>
                 </DialogActions>
             </Dialog>
-            <Snackbar open={requestSubmitted} autoHideDuration={3000} onClose={() => {
-                setRequestSubmitted(false)
-            }}>
-                <Alert onClose={() => {
-                    setRequestSubmitted(false)
-                }} severity="success" sx={{width: '100%'}}>
-                    Your conjecture has been submitted!
-                </Alert>
-            </Snackbar>
         </div>
     )
 }
