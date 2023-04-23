@@ -22,7 +22,7 @@ import AlertTitle from "@mui/material/AlertTitle";
 import DialogActions from "@mui/material/DialogActions";
 import Snackbar from "@mui/material/Snackbar";
 import * as React from "react";
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import axios from "axios";
 import LogOut from "./LogOut";
 import {Navigate} from "react-router-dom";
@@ -39,7 +39,7 @@ export default function ProfileSetting(props) {
   const [userEmail, setUserEmail] = React.useState(null);
   const [settingUpdateResponse, setSettingUpdateResponse] = React.useState(null);
 
-  React.useEffect( () => {
+  useEffect( () => {
    setOpen(props.openDisp)
    console.log(`updated open settings`)
   }, [props])
