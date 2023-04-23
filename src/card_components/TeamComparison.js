@@ -4,6 +4,7 @@ import {useState} from 'react';
 import MatchUpTable from './MatchUpTable';
 import ConjectureDialog from './ConjectureDialog';
 import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
 import TeamCard from './TeamCard';
 
 
@@ -60,43 +61,56 @@ export default function TeamComparison(props) {
 
 
     return(
-        <div className="simple_game__wrapper">
-            <div className="sub_card__wrapper">
-                <TeamCard img={props.lineDetails.home_logo}
-                          title={"(H) " + props.lineDetails.home}
-                          cardMaxWidth={150}
-                          mediaMaxHeight={200}
-                />
-                <TeamCard img={props.lineDetails.away_logo}
-                          title={props.lineDetails.away}
-                          cardMaxWidth={150}
-                          mediaMaxHeight={200}
-                />
-            </div>
-           <div className="simple_game__summary">
-             <MatchUpTable
-                 lineSummary = {lineSummary}
-                 gameDetails = {gameDetails}
-                 showDetail = {showDetail}
-             />
-            </div>
-            <div className="comparison_button_container">
+       <div>
+        <Box sx={{
+                display: 'grid',
+                gap: .25,
+                flexDirection: 'column',
+                justifyContent: 'center',
+                }}>
+                <Box sx={{
+                            display: 'flex',
+                            gap: 1,
+                            flexDirection: 'row',
+                            justifyContent: 'center',
+                            }}
+                            >
+                    <TeamCard img={props.lineDetails.home_logo}
+                              title={"(H) " + props.lineDetails.home}
+                              cardMaxWidth={150}
+                              mediaMaxHeight={160}
+                    />
+                    <TeamCard img={props.lineDetails.away_logo}
+                              title={props.lineDetails.away}
+                              cardMaxWidth={150}
+                              mediaMaxHeight={160}
+                    />
+                </Box>
+               <Box sx={{marginTop: .5}}>
+                 <MatchUpTable
+                     lineSummary = {lineSummary}
+                     gameDetails = {gameDetails}
+                     showDetail = {showDetail}
+                 />
+                </Box>
+                <div className="comparison_button_container">
 
-                <div className="place_conjecture__button">
-                    <ConjectureDialog
-                        buttonLabel="Place Conjecture"
-                        visuals={visuals}
-                        spreadSummary = {lineSummary}
-                        gameId = {props.lineDetails.game_id}
-                        >
-                    </ConjectureDialog>
-               </div>
+                    <div className="place_conjecture__button">
+                        <ConjectureDialog
+                            buttonLabel="Place Conjecture"
+                            visuals={visuals}
+                            spreadSummary = {lineSummary}
+                            gameId = {props.lineDetails.game_id}
+                            >
+                        </ConjectureDialog>
+                   </div>
 
-                <div className="game_detail__button">
-                    <Button size='small' onClick={manageDetail} variant="contained">Show Details</Button>
-               </div>
-            </div>
-         </div>
+                    <div className="game_detail__button">
+                        <Button size='small' onClick={manageDetail} variant="contained">Show Details</Button>
+                   </div>
+                </div>
+            </Box>
+       </div>
 
     )
 }
