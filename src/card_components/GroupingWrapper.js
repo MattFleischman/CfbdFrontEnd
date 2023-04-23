@@ -154,8 +154,6 @@ export default function GroupingWrapper(props) {
             fetchGameLines(props.week);
         }, [props.week]);
 
-  //console.log("GameLine week: " + props.week)
-  //console.log("GameLines: " + JSON.stringify(gameLines))
 
 
     return(

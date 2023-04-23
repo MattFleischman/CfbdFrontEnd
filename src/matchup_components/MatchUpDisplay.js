@@ -29,6 +29,7 @@ export default function MatchUpDisplay() {
 //TODO: Need to enable sign out and check when the login token expires
   console.log("starting app")
   console.log(`login name: ${localStorage.getItem("loginName")}`)
+  console.log(`login Id: ${localStorage.getItem("loginId")}`)
   if (!localStorage.getItem("authenticated")) {
       console.log(`homeAuthenticated: ${localStorage.getItem("authenticated")}`)
     return <Navigate replace to="/login" />;

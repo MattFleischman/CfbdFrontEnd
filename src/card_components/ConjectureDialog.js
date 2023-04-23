@@ -137,6 +137,25 @@ export default function ConjectureDialog(props) {
         return false
     }
 
+    const predictionBaseLineEval = (source, type) => {
+    if (type == "Spread") {
+        if (source == "OSTree" ) {
+            return standardSpreads.oldst
+            }
+        else {
+            return standardSpreads.vegas
+        }
+    }
+    else {
+        if (source == "OSTree" ) {
+            return ouSpreads.oldst
+            }
+        else {
+            return ouSpreads.vegas
+        }
+    }
+    }
+
 
 
         const postConjecture = async (request) => {
@@ -160,14 +179,20 @@ export default function ConjectureDialog(props) {
         console.log(`submitError: ${submitError}`)
         const now = new Date().toISOString()
         console.log(`timestamp: ${now}`)
+        let predictionBaseline = predictionBaseLineEval(source, conjectureType)
+        console.log(`predictionBaseline: ${predictionBaseline}`)
         setOpen(false);
         postConjecture(
                     {
-                    user_id: "ostree",
+                    user_id: localStorage.getItem("loginId").toString(),
                     conjecture_timestamp: now,
-                    game_id: props.gameId,
-                    conjecture_direction: conjectureDirection,
                     conjecture_amount: conjecture,
+                    game_id: props.gameId,
+                    match_up: `(H) ${props.visuals.home_title} vs ${props.visuals.away_title}`,
+                    baseline_source: source,
+                    conjecture_type: conjectureType,
+                    conjecture_baseline: predictionBaseline,
+                    conjecture_direction: conjectureDirection,
                     conjecture_status: "Pending"
                     }
                     )

@@ -19,8 +19,9 @@ export default function LoginBase() {
   ); //switch from local storage to react context
 
   const responseFacebook = (response) => {
-    console.log(`auth response: ${response}`);
+    console.log(`auth response: ${JSON.stringify(response)}`);
     localStorage.setItem("loginData", response);
+    localStorage.setItem("loginId", response.id);
     localStorage.setItem("loginName", response.name)
     localStorage.setItem("userImage", response.picture.data.url);
 

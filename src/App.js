@@ -30,11 +30,16 @@ function App() {
     //TODO: Need to enable sign out and check when the login token expires
   console.log("starting app")
   console.log(`login name: ${localStorage.getItem("loginName")}`)
-  if (!localStorage.getItem("authenticated")) {
+
+
+
+  if ((!localStorage.getItem("authenticated")) || (!localStorage.getItem("loginId"))) {
       console.log(`homeAuthenticated: ${localStorage.getItem("authenticated")}`)
+      console.log(`login id: ${localStorage.getItem("loginId")}`)
     return <Navigate replace to="/login" />;
   } else {
     console.log(`homeAuthenticated: ${localStorage.getItem("authenticated")}`)
+    console.log(`login id: ${localStorage.getItem("loginId")}`)
     return (
       <div>
           <div className="App">
@@ -62,7 +67,7 @@ function App() {
                   }
                 <img src={stevenPlockerSurprise} className="App-MainLogo" alt="logo" />
               </header>
-              <h3>Welcome to OldSpruceTree&apos;s College Football Score Predictor <br/> Pick a match-up below to predict scores </h3>
+              <h3>Welcome to OldSpruceTree&apos;s College Football Score Predictor <br/> Select an option above to dig into CFB predictions </h3>
               <div className="logos">
                   <img src={bobbyPetrinoBliss} className="App-logoR2L" alt="logo S3" />
                   <img src={muschampGrimace} className="App-logoL2R" alt="logo CloudFront" />
