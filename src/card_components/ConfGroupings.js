@@ -18,7 +18,7 @@ export default function ConfGroupings(props) {
       }, [props])
 
       console.log("running match Pairing")
-      const sliderItems: number = props.lineDetails.length > 4 ? 4 : props.lineDetails.length;
+      const sliderItems: number = props.lineDetails.length > 3 ? 3 : props.lineDetails.length;
       const matchups: Array<any> = [];
 
       for (let i = 0; i < props.lineDetails.length; i += sliderItems) {
@@ -26,7 +26,7 @@ export default function ConfGroupings(props) {
         console.log(`item ${i} out of ${props.lineDetails.length}`)
           matchups.push(
              <Grid container
-                      spacing={2}
+                      spacing={3}
                       direction="row"
                       style={{
                         justifyContent: 'center',
