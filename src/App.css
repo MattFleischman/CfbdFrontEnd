@@ -38,18 +38,7 @@ $radius: 0.2rem;
     margin: 2rem;
 }
 
-.sub_card__wrapper{
-    display: grid;
-    background: #282c34;
-    grid-template-columns: repeat(auto-fit, minmax(5rem, 10rem));
-    {/*gap: 1rem;*/}
-    justify-content: left;
-}
 
-.simple_game__wrapper{
-  background-color: #282c34;
-  padding: 2px;
-}
 
 .simple_game__summary{
     margin-top: .25rem;
