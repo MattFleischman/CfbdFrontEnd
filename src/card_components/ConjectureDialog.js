@@ -156,8 +156,6 @@ export default function ConjectureDialog(props) {
     }
     }
 
-
-
         const postConjecture = async (request) => {
             console.log(`posting conjector: ${request}`)
 
@@ -191,7 +189,7 @@ export default function ConjectureDialog(props) {
                     match_up: `(H) ${props.visuals.home_title} vs ${props.visuals.away_title}`,
                     baseline_source: source,
                     conjecture_type: conjectureType,
-                    conjecture_baseline: predictionBaseline,
+                    conjecture_baseline : predictionBaseline,
                     conjecture_direction: conjectureDirection,
                     conjecture_status: "Pending"
                     }

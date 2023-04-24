@@ -37,7 +37,6 @@ export default function ProfileSetting(props) {
   const [selectedDisplay, setSelectedDisplay] = React.useState(false);
   const [matchUpGrouping, setMatchUpGrouping] = React.useState(localStorage.getItem("matchupDisplay") || "conference");
   const [userEmail, setUserEmail] = React.useState(null);
-  const [settingUpdateResponse, setSettingUpdateResponse] = React.useState(null);
 
   useEffect( () => {
    setOpen(props.openDisp)
@@ -50,7 +49,7 @@ export default function ProfileSetting(props) {
     setSettingDisplay(null);
     setSelectedDisplay(null);
     setMatchUpGrouping(localStorage.getItem("matchupDisplay") || "conference");
-    setSettingUpdateResponse(null);
+
 
   }
   console.log(`requestSubmitted: ${requestSubmitted}`)
@@ -78,43 +77,50 @@ export default function ProfileSetting(props) {
 
 
   const postSettingUpdate = async (request) => {
-            console.log(`posting setting update: ${request}`)
+            console.log(`posting setting update for ${request.resource}`)
+            console.log(`payload: ${JSON.stringify(request.body)}`)
 
-           /* const response = await axios
-                .post("https://u0dppkg69j.execute-api.us-east-1.amazonaws.com/prod",
-                    request
+             const response = await axios
+                .patch(`https://0s2wopde2k.execute-api.us-east-1.amazonaws.com/prod/profilesettings/${request.resource}`,
+                    request.body
                 )
                 .catch((err) => console.log(err));
             if (response) {
                 const settingUpdateResponse = response.data;
 
                 console.log("settingUpdateResponse: ", settingUpdateResponse);
-                setSettingUpdateResponse(settingUpdateResponse);
-            }*/
+            }
         };
 
 
   const handleSubmit = () => {
     if (!emailRequestValidate(userEmail)) {
-        postSettingUpdate({
-                        user_email: userEmail,
-                        matchup_grouping: matchUpGrouping
+        postSettingUpdate({resource: 'email',
+                        body: {
+                            userId: localStorage.getItem("loginId"),
+                            email: userEmail}
+                            });
+        }
+     if (matchUpGrouping != localStorage.getItem("matchupDisplay")) {
+        postSettingUpdate({resource: 'matchupdisplaypreference',
+                        body: {
+                            userId: localStorage.getItem("loginId"),
+                            matchUpDisplayPreference : matchUpGrouping
+                        }
                         });
-        setRequestSubmitted(true);
         localStorage.setItem("matchupDisplay", matchUpGrouping)
+        }
+        setRequestSubmitted(true);
         console.log(`request submitted`)
         resetState();
-        }
-      else {
-        return
-    }
 
   };
 
   const emailRequestValidate = (email) => {
       console.log(`validate email: ${email}`)
       if (!email) {
-      console.log(`no email submitted`)}
+      console.log(`no email submitted`)
+      return true}
       else if (validateEmail(email)) {
         console.log(`passed email validation`)
         return false
