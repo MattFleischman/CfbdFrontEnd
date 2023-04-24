@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect } from 'react';
 import '../App.css';
-import GroupingWrapper from '../card_components/GroupingWrapper';
+import GroupingWrapper from '../grouping_components/GroupingWrapper';
 import AppHeader from '../AppHeader';
 import { Navigate } from "react-router-dom";
 import MenuItem from '@mui/material/MenuItem';
@@ -10,10 +10,7 @@ import Select from '@mui/material/Select';
 import Backdrop from '@mui/material/Backdrop';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
-//import {weekOptions} from "./Utilities/Constants";
-//import { purple } from "@mui/material/colors";
 
-//import weekOptions from './Utilities/Constants';
 
 export default function MatchUpDisplay() {
     const {weekOptions} = require('../Utilities/Constants')

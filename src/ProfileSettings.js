@@ -35,7 +35,7 @@ export default function ProfileSetting(props) {
   const [errorMessage, setErrorMessage] = React.useState(null);
   const [settingDisplay, setSettingDisplay] = React.useState(null);
   const [selectedDisplay, setSelectedDisplay] = React.useState(false);
-  const [matchUpGrouping, setMatchUpGrouping] = React.useState("conference");
+  const [matchUpGrouping, setMatchUpGrouping] = React.useState(localStorage.getItem("matchupDisplay") || "conference");
   const [userEmail, setUserEmail] = React.useState(null);
   const [settingUpdateResponse, setSettingUpdateResponse] = React.useState(null);
 
@@ -49,7 +49,7 @@ export default function ProfileSetting(props) {
     setErrorMessage(null);
     setSettingDisplay(null);
     setSelectedDisplay(null);
-    setMatchUpGrouping("conference");
+    setMatchUpGrouping(localStorage.getItem("matchupDisplay") || "conference");
     setSettingUpdateResponse(null);
 
   }
@@ -93,6 +93,7 @@ export default function ProfileSetting(props) {
             }*/
         };
 
+
   const handleSubmit = () => {
     if (!emailRequestValidate(userEmail)) {
         postSettingUpdate({
@@ -100,6 +101,7 @@ export default function ProfileSetting(props) {
                         matchup_grouping: matchUpGrouping
                         });
         setRequestSubmitted(true);
+        localStorage.setItem("matchupDisplay", matchUpGrouping)
         console.log(`request submitted`)
         resetState();
         }
@@ -111,7 +113,9 @@ export default function ProfileSetting(props) {
 
   const emailRequestValidate = (email) => {
       console.log(`validate email: ${email}`)
-      if (validateEmail(email)) {
+      if (!email) {
+      console.log(`no email submitted`)}
+      else if (validateEmail(email)) {
         console.log(`passed email validation`)
         return false
         }
@@ -219,7 +223,8 @@ export default function ProfileSetting(props) {
                     <Alert onClose={() => {
                         setRequestSubmitted(false)
                     }} severity="success" sx={{width: '100%'}}>
-                        Your Settings have been updated!
+                    <AlertTitle>Settings Updated!</AlertTitle>
+                        Refresh your browser to reflect changes
                     </Alert>
             </Snackbar>
                 </DialogContent>

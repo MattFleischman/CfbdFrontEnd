@@ -1,4 +1,4 @@
-import TeamComparison from './TeamComparison';
+import TeamComparison from '../card_components/TeamComparison';
 
 
 export default function OuSpreadGroupings(props) {

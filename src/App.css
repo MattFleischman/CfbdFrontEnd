@@ -34,11 +34,9 @@ $radius: 0.2rem;
       padding: 2px;
     }
 
-.conferenceGroup {
+.groupingContainer {
     margin: 2rem;
 }
-
-
 
 .simple_game__summary{
     margin-top: .25rem;
