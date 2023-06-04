@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useEffect, useMemo, useState } from "react";
-import TeamCard from './TeamCard';
+import TeamCard from '../TeamCard';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -31,7 +31,7 @@ import Fade from '@mui/material/Fade';
 import Snackbar from '@mui/material/Snackbar';
 import axios from "axios";
 
-export default function ConjectureDialog(props) {
+export default function MatchupDialog(props) {
 
   const [open, setOpen] = React.useState(false);
   const [showOst, setShowOst] = React.useState(true);
@@ -53,14 +53,6 @@ export default function ConjectureDialog(props) {
   const standardSpreads = props.spreadSummary[0]
   const ouSpreads = props.spreadSummary[1]
   const overDirections = ["over","Over"]
-/*
-  console.log(`showOst: ${showOst}`)
-  console.log(`showVegas: ${showVegas}`)
-  console.log(`showOU: ${showOU}`)
-  console.log(`showSpread: ${showSpread}`)
-  console.log(`standardSpreads: ${standardSpreads}`)
-  console.log(`ouSpreads: ${ouSpreads}`)
-  console.log(`requestSubmitted: ${requestSubmitted}`)*/
 
   const handleSourceChange = (event) => {
     setSource(event.target.value);
@@ -197,7 +189,6 @@ export default function ConjectureDialog(props) {
         setRequestSubmitted(true);
         setShowingAlert(true);
         resetState();
-    //add in backend integration API
     }
     else {
         return
@@ -206,7 +197,7 @@ export default function ConjectureDialog(props) {
 
   return (
     <div>
-      <Button size='small' variant="outlined" onClick={handleClickOpen}>
+      <Button size='small' variant="outlined" onClick={handleClickOpen} >
         {props.buttonLabel}
       </Button>
       <Dialog

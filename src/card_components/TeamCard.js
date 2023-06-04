@@ -29,8 +29,9 @@ export default function TeamCard(props) {
                     component="img"
                      style={{
                             maxwidth: "auto",
-                            minwidth: 30,
-                            maxHeight: props.mediaMaxHeight
+                            minwidth: "auto",
+                            maxHeight: props.mediaMaxHeight,
+                            minHeight: "auto"
                           }}
                     image={props.img}
                     title="team image"

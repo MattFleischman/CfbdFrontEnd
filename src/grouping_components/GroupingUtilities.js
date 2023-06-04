@@ -12,7 +12,7 @@ export function applyGroupings(lineDetails) {
                     console.log(`item ${i} out of ${lineDetails.length}`)
                       matchups.push(
                          <Grid container
-                                  spacing={3}
+                                  spacing={2.5}
                                   direction="row"
                                   style={{
                                     justifyContent: 'center',

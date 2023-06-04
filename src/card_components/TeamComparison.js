@@ -2,7 +2,7 @@ import React from "react";
 import {useState} from 'react';
 
 import MatchUpTable from './MatchUpTable';
-import ConjectureDialog from './ConjectureDialog';
+import ConjectureDialog from './MatchupDialog/MatchupDialog';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import TeamCard from './TeamCard';
@@ -67,37 +67,47 @@ export default function TeamComparison(props) {
                 gap: .25,
                 flexDirection: 'column',
                 justifyContent: 'center',
+                overflow: 'hidden'
                 }}>
-                <Box sx={{
-                            display: 'flex',
-                            gap: 1,
-                            flexDirection: 'row',
-                            justifyContent: 'center',
-                            }}
-                            >
-                    <TeamCard img={props.lineDetails.home_logo}
-                              title={"(H) " + props.lineDetails.home}
-                              cardMaxWidth={150}
-                              mediaMaxHeight={160}
-                    />
-                    <TeamCard img={props.lineDetails.away_logo}
-                              title={props.lineDetails.away}
-                              cardMaxWidth={150}
-                              mediaMaxHeight={160}
-                    />
+                <Box>
+                    <Box sx={{
+                                display: 'flex',
+                                gap: 1,
+                                flexDirection: 'row',
+                                justifyContent: 'center',
+                                }}
+                                >
+                        <TeamCard img={props.lineDetails.home_logo}
+                                  title={"(H) " + props.lineDetails.home}
+                                  cardMaxWidth={"auto"}
+                                  mediaMaxHeight={"auto"}
+                        />
+                        <TeamCard img={props.lineDetails.away_logo}
+                                  title={props.lineDetails.away}
+                                  cardMaxWidth={"auto"}
+                                  mediaMaxHeight={"auto"}
+                        />
+                    </Box>
+                   <Box sx={{marginTop: .5,
+                                display: 'flex',
+                                flexDirection: 'row',
+                                justifyContent: 'center',}}>
+                     <MatchUpTable
+                         lineSummary = {lineSummary}
+                         gameDetails = {gameDetails}
+                         showDetail = {showDetail}
+                     />
+                    </Box>
                 </Box>
-               <Box sx={{marginTop: .5}}>
-                 <MatchUpTable
-                     lineSummary = {lineSummary}
-                     gameDetails = {gameDetails}
-                     showDetail = {showDetail}
-                 />
-                </Box>
-                <div className="comparison_button_container">
 
-                    <div className="place_conjecture__button">
+                <Box sx={{display: 'flex',
+                          marginTop: .4,
+                          gap: 2,
+                          flexDirection: 'row',
+                          justifyContent: 'center',}}>
+                    <div>
                         <ConjectureDialog
-                            buttonLabel="Place Conjecture"
+                            buttonLabel="Conjecture"
                             visuals={visuals}
                             spreadSummary = {lineSummary}
                             gameId = {props.lineDetails.game_id}
@@ -105,10 +115,11 @@ export default function TeamComparison(props) {
                         </ConjectureDialog>
                    </div>
 
-                    <div className="game_detail__button">
+                    <div>
                         <Button size='small' onClick={manageDetail} variant="contained">Show Details</Button>
                    </div>
-                </div>
+                </Box>
+
             </Box>
        </div>
 

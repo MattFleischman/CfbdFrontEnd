@@ -10,6 +10,7 @@ import { Navigate } from "react-router-dom";
 import '../App.css';
 import App from "../App.js";
 import { styled } from "@mui/material/styles";
+import axios from "axios";
 
 
 export default function LoginBase() {
@@ -18,6 +19,28 @@ export default function LoginBase() {
   localStorage.getItem(localStorage.getItem("authenticated")|| false)
   ); //switch from local storage to react context
 
+  const getSettingUpdate = async (userId) => {
+            console.log(`getting profile settings for ${userId}`)
+
+             const response = await axios
+                .get(`https://0s2wopde2k.execute-api.us-east-1.amazonaws.com/prod/profilesettings/${userId}`
+                )
+                .catch((err) => console.log(err));
+            if (response) {
+                const profileSettingResponse = response.data;
+
+                const profileSettings = profileSettingResponse.users[0]
+
+                console.log("profileSettingResponse: ", profileSettings);
+
+                localStorage.setItem("email", profileSettings.email);
+                localStorage.setItem("matchUpDisplayPreference", profileSettings.matchUpDisplayPreference);
+                localStorage.setItem("tokenAmount", profileSettings.tokenAmount)
+
+                return
+            }
+        };
+
   const responseFacebook = (response) => {
     console.log(`auth response: ${JSON.stringify(response)}`);
     localStorage.setItem("loginData", response);
@@ -25,6 +48,7 @@ export default function LoginBase() {
     localStorage.setItem("loginName", response.name)
     localStorage.setItem("userImage", response.picture.data.url);
 
+    getSettingUpdate(response.id)
 
     if (response.accessToken) {
         localStorage.setItem("authenticated", true);

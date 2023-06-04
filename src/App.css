@@ -35,7 +35,7 @@ $radius: 0.2rem;
     }
 
 .groupingContainer {
-    margin: 2rem;
+    margin: 1rem;
 }
 
 .simple_game__summary{
@@ -50,14 +50,6 @@ $radius: 0.2rem;
 
 }
 
-.comparison_button_container{
-    display: flex;
-    gap: .75rem;
-    text-align: center;
-    justify-content: left;
-    flex-wrap: wrap;
-    margin: .5rem;
-}
 
 
 .card{
@@ -128,8 +120,8 @@ $radius: 0.2rem;
 }
 
 .App-logoL2R {
-  height: 25vmin;
-  width: 40vmin;
+  height: 15rem;
+  width: 24rem;
   pointer-events: none;
   margin-top: 1rem;
   margin-left: 12rem;
@@ -137,8 +129,8 @@ $radius: 0.2rem;
 }
 
 .App-logoR2L {
-  height: 25vmin;
-  width: 40vmin;
+  height: 15rem;
+  width: 24rem;
   pointer-events: none;
   margin-top: 1rem;
   margin-right: 12rem;

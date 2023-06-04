@@ -171,7 +171,7 @@ export default function ProfileSetting(props) {
                                         </Typography>
                                     </FormControl>
                                         <FormControl sx={{width: '60%'}}>
-                                          <InputLabel id="demo-simple-select-label">Age</InputLabel>
+                                          <InputLabel id="demo-simple-select-label">group</InputLabel>
                                           <Select
                                             labelId="demo-simple-select-label"
                                             id="demo-simple-select"

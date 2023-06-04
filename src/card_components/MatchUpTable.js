@@ -11,7 +11,7 @@ export default function MatchUpTable(props) {
 
     return(
         <div>
-        <TableContainer component={Paper} sx={{ minWidth: 200, maxWidth: 310 , borderBottom: .5,  borderColor: 'grey.500' }} >
+        <TableContainer component={Paper} sx={{ justifyContent: 'center', minWidth: "auto", maxWidth: "auto" , borderBottom: .5,  borderColor: 'grey.500' }} >
               <Table aria-label="simple table">
                 <TableHead>
                   <TableRow>
@@ -36,7 +36,7 @@ export default function MatchUpTable(props) {
               </TableContainer>
             {props.showDetail &&
                 (
-            <TableContainer component={Paper} sx={{ minWidth: 200, maxWidth: 310 , borderBottom: .5,  borderColor: 'grey.500' }}>
+            <TableContainer component={Paper} sx={{ minWidth: "auto", maxWidth: "auto" , borderBottom: .5,  borderColor: 'grey.500' }}>
             <Table aria-label="simple table">
                 <TableHead>
                   <TableRow>

@@ -44,6 +44,8 @@ export default function AccountSettings(props) {
   const [deleteInitiated, setDeleteInitiated] = React.useState(false);
   const [settingDisplay, setSettingDisplay] = React.useState(null);
   const [selectedDisplay, setSelectedDisplay] = React.useState(false);
+  const [fundingMessage, setFundingMessage] = React.useState(false);
+  const [tokenAmount, setTokenAmount] = React.useState(localStorage.getItem("tokenAmount"))
 
   React.useEffect( () => {
    setOpen(props.openDisp)
@@ -110,33 +112,63 @@ export default function AccountSettings(props) {
 
 
   const postFundingRequest = async (request) => {
-            console.log(`posting funding request: ${request}`)
+            console.log(`posting funding request: ${JSON.stringify(request)}`)
+            console.log(`start funding approval request`)
 
-           /* const response = await axios
-                .post("https://u0dppkg69j.execute-api.us-east-1.amazonaws.com/prod/placedconjectures",
+            const response = await axios
+                .post(`https://j73p7rq7u8.execute-api.us-east-1.amazonaws.com/prod/fundingrequest`,
                     request
                 )
-                .catch((err) => console.log(err));
+                .catch((err) => console.log(`error: ${err}`));
+
             if (response) {
                 const fundingResponse = response.data;
 
                 console.log("fundingResponse: ", fundingResponse);
-                setFundingRequestResponse(conjectureResponse);
-            }*/
+                setFundingRequestResponse(fundingResponse);
+            }
+            else {
+            console.log("no response")
+            }
+           console.log(`end funding approval request`)
         };
+
+  function genRandomString(length) {
+   var chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()';
+   var charLength = chars.length;
+   var result = '';
+   for ( var i = 0; i < length; i++ ) {
+      result += chars.charAt(Math.floor(Math.random() * charLength));
+   }
+   return result;
+    }
 
   const handleFundingRequest = (amount) => {
                   setRequestedAmount(amount);
                   const now = new Date().toISOString()
-                  console.log(`timestamp: ${now}`)
-                  //setOpen(false);
+                  console.log(`timestamp: ${now}`);
+                  const request = genRandomString(12);
+                  console.log(`requestId: ${request}`)
                   setFundingRequested(false);
-                  postFundingRequest({
-                        user_id: localStorage.getItem("loginId"),
-                        conjecture_timestamp: now,
-                        funding_amount: amount,
-                        conjecture_status: "Pending"
-                        });
+                  postFundingRequest(
+                         {
+                             requestId: {
+                                S: request
+                              },
+                             timestamp: {
+                                S: now
+                              },
+                              userId: {
+                                S: localStorage.getItem("loginId")
+                              },
+                              amount: {
+                                N: fundingAmount
+                              },
+                              message: {
+                                S: fundingMessage
+                              }
+                          }
+                          );
                   setRequestSubmitted(true);
                   resetState();
   };
@@ -154,6 +186,10 @@ export default function AccountSettings(props) {
 
   const handleFundingAmount = (event) => {
     setFundingAmount(event.target.value);
+  };
+
+  const updateFundingMessage = (event) => {
+    setFundingMessage(event.target.value);
   };
 
   const fundingRequestValidate = (amount) => {
@@ -251,6 +287,16 @@ export default function AccountSettings(props) {
                             maxWidth: 400,
                             padding: .5
                         }}>
+                            <Typography sx={{paddingTop: 3}}>Token Amount:</Typography>
+                            <Typography sx={{paddingTop: 3, paddingRight: 4, fontWeight: 800}}>{tokenAmount}</Typography>
+                        </Box>
+                        <Box textAlign="left" sx={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            maxWidth: 400,
+                            padding: .5
+                        }}>
                             <Typography sx={{paddingTop: 3}}>Request Tokens:</Typography>
                             <TextField
                                 autoFocus
@@ -291,7 +337,8 @@ export default function AccountSettings(props) {
                                    id="standard-basic"
                                    variant="standard"
                                    multiline
-                                   maxRows={4}/>
+                                   maxRows={4}
+                                   onChange={updateFundingMessage}/>
                         <Box textAlign="right">
                         <Button variant="text"
                                 textAlign="right"
