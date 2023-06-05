@@ -15,8 +15,9 @@ export function applyGroupings(lineDetails) {
                                   spacing={2.5}
                                   direction="row"
                                   style={{
+                                    marginLeft: 2,
                                     justifyContent: 'center',
-                                    minHeight: 600,
+                                    minHeight: 450,
                                     maxHeight: 700
                                    }}
                                     >

@@ -6,13 +6,35 @@ import ConjectureDialog from './MatchupDialog/MatchupDialog';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import TeamCard from './TeamCard';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 
 export default function TeamComparison(props) {
     const [showDetail, setShowDetail] = useState(false);
+    const [showLines, setShowLines] = useState(true);
+    const [showDialog, setShowDialog] = useState(false);
+    const [dialogTab, setDialogTab] = useState(null);
+    const [requestSubmitted, setRequestSubmitted] = React.useState(false)
 
-    const manageDetail = event => {
-        setShowDetail(current => !current);
+    console.log(`requestSubmitted: ${requestSubmitted}`)
+
+    function setSubmitted(status) {
+      setRequestSubmitted(status)
+      }
+
+    function openDialog(state) {
+    setShowDialog(state)
+    }
+
+    const openDetail = event => {
+        openDialog(true);
+        setDialogTab("detail")
+    }
+
+    const openConjecture = event => {
+        openDialog(true);
+        setDialogTab("conjecture")
     }
 
     function pointsToScore(home_points, away_points) {
@@ -65,15 +87,22 @@ export default function TeamComparison(props) {
         <Box sx={{
                 display: 'grid',
                 gap: .25,
+                borderRadius: 1,
                 flexDirection: 'column',
                 justifyContent: 'center',
-                overflow: 'hidden'
+                overflow: 'hidden',
+                backgroundColor: '#c5c6d0',
+                maxWidth: 350
                 }}>
                 <Box>
                     <Box sx={{
                                 display: 'flex',
                                 gap: 1,
                                 flexDirection: 'row',
+                                paddingLeft: 1,
+                                paddingRight: 1,
+                                paddingTop: 1,
+                                borderRadius: 1,
                                 justifyContent: 'center',
                                 }}
                                 >
@@ -90,34 +119,52 @@ export default function TeamComparison(props) {
                     </Box>
                    <Box sx={{marginTop: .5,
                                 display: 'flex',
+                                paddingLeft: 1,
+                                paddingRight: 1,
+                                borderRadius: 1,
                                 flexDirection: 'row',
                                 justifyContent: 'center',}}>
                      <MatchUpTable
                          lineSummary = {lineSummary}
                          gameDetails = {gameDetails}
+                         showLines = {showLines}
                          showDetail = {showDetail}
                      />
                     </Box>
                 </Box>
 
                 <Box sx={{display: 'flex',
-                          marginTop: .4,
+                          marginTop: .5,
+                          marginBottom: .5,
                           gap: 2,
                           flexDirection: 'row',
                           justifyContent: 'center',}}>
-                    <div>
-                        <ConjectureDialog
-                            buttonLabel="Conjecture"
-                            visuals={visuals}
-                            spreadSummary = {lineSummary}
-                            gameId = {props.lineDetails.game_id}
-                            >
-                        </ConjectureDialog>
-                   </div>
 
-                    <div>
-                        <Button size='small' onClick={manageDetail} variant="contained">Show Details</Button>
-                   </div>
+                          <Button size='small' variant="outlined" onClick={openConjecture} >
+                                Conjecture
+                          </Button>
+                        <Button size='small' onClick={openDetail} variant="contained">
+                                Show Details
+                        </Button>
+                        {(showDialog &&
+                            <ConjectureDialog
+                                visuals={visuals}
+                                spreadSummary = {lineSummary}
+                                gameId = {props.lineDetails.game_id}
+                                gameDetails = {gameDetails}
+                                startingTab = {dialogTab}
+                                setSubmitted = {setSubmitted}
+                                openDialog = {openDialog}
+                                showDialog = {showDialog}
+                                >
+                            </ConjectureDialog>
+                        )}
+                  <Snackbar open={requestSubmitted} autoHideDuration={3000} onClose={() => {setRequestSubmitted(false)}}>
+                      <Alert onClose={() => {setRequestSubmitted(false)}} severity="success" sx={{ width: '100%' }}>
+                        Your conjecture has been submitted!
+                      </Alert>
+                 </Snackbar>
+
                 </Box>
 
             </Box>

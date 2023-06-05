@@ -1,7 +1,12 @@
 import * as React from 'react';
 import { useEffect, useMemo, useState } from "react";
 import TeamCard from '../TeamCard';
+import PlaceConjectureTab from './PlaceConjectureTab'
+import MatchUpDetailsTab from './MatchUpDetailsTab'
+import TabPanel from './TabPanel'
 import Button from '@mui/material/Button';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -31,14 +36,13 @@ import Fade from '@mui/material/Fade';
 import Snackbar from '@mui/material/Snackbar';
 import axios from "axios";
 
-export default function MatchupDialog(props) {
+export default function MatchupDialog({visuals, spreadSummary, gameId, gameDetails, startingTab, setSubmitted, openDialog, showDialog}) {
 
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(showDialog);
   const [showOst, setShowOst] = React.useState(true);
   const [showVegas, setShowVegas] = React.useState(true);
   const [showOU, setShowOU] = React.useState(true);
   const [showSpread, setShowSpread] = React.useState(true);
-  const [requestSubmitted, setRequestSubmitted] = React.useState(false)
   const [source, setSource] = React.useState(null);
   const [conjectureType, setConjectureType] = React.useState(null);
   const [conjecture, setConjecture] = React.useState(0);
@@ -50,9 +54,18 @@ export default function MatchupDialog(props) {
   const [coverDirections, setCoverDirections] = React.useState(null);
   const [beatDirections, setBeatDirections] = React.useState(null);
 
-  const standardSpreads = props.spreadSummary[0]
-  const ouSpreads = props.spreadSummary[1]
+  console.log(`open: ${open}`)
+
+
+  const [tabShown, setTabShown] = React.useState(startingTab);
+
+  const standardSpreads = spreadSummary[0]
+  const ouSpreads = spreadSummary[1]
   const overDirections = ["over","Over"]
+
+    const changeTab = (event: React.SyntheticEvent, newTab: string) => {
+    setTabShown(newTab);
+  };
 
   const handleSourceChange = (event) => {
     setSource(event.target.value);
@@ -64,6 +77,13 @@ export default function MatchupDialog(props) {
         setShowVegas(true)
     }
   };
+
+  function tabProps(index: string) {
+  return {
+    id: `tab-${index}`,
+    'aria-controls': `tabpanel-${index}`,
+  };
+}
 
   const handleConjectureTypeChange = (event) => {
     setConjectureType(event.target.value);
@@ -94,254 +114,49 @@ export default function MatchupDialog(props) {
     setSource("");
   }
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
 
-  const handleClose = () => {
+  function handleClose() {
     setOpen(false);
+    openDialog(false);
     resetState()
   };
 
-  const handleConjecture = (event) => {
-    setConjecture(event.target.value);
-  };
-
-  const handleConjectureDirection = (event) => {
-    setConjectureDirection(event.target.value);
-  };
-
-  const submitValidate = () => {
-       /*console.log(`conjectureType: ${conjectureType}`)
-       console.log(`source: ${source}`)
-       console.log(`conjecture: ${conjecture}`)
-       console.log(`conjectureDirection: ${conjectureDirection}`)*/
-      if ((conjectureType == "") || (source == "") || (conjectureDirection === null)) {
-          setSubmitError(true)
-          setErrorMessage("Spread type, Source, and Conjecture Direction need to be selected to submit. ")
-          return true
-          }
-      else if (conjecture == "0") {
-        setSubmitError(true)
-        setErrorMessage("conjecture amount has to be greater than 0")
-        return true
-        }
-        return false
-    }
-
-    const predictionBaseLineEval = (source, type) => {
-    if (type == "Spread") {
-        if (source == "OSTree" ) {
-            return standardSpreads.oldst
-            }
-        else {
-            return standardSpreads.vegas
-        }
-    }
-    else {
-        if (source == "OSTree" ) {
-            return ouSpreads.oldst
-            }
-        else {
-            return ouSpreads.vegas
-        }
-    }
-    }
-
-        const postConjecture = async (request) => {
-            console.log(`posting conjector: ${request}`)
-
-            const response = await axios
-                .post("https://u0dppkg69j.execute-api.us-east-1.amazonaws.com/prod/placedconjectures",
-                    request
-                )
-                .catch((err) => console.log(err));
-            if (response) {
-                const conjectureResponse = response.data;
-
-                console.log("conjectureResponse: ", conjectureResponse);
-                setPlaceConjectorResponse(conjectureResponse);
-            }
-        };
-
-  const handleSubmit = () => {
-    if (!submitValidate()) {
-        console.log(`submitError: ${submitError}`)
-        const now = new Date().toISOString()
-        console.log(`timestamp: ${now}`)
-        let predictionBaseline = predictionBaseLineEval(source, conjectureType)
-        console.log(`predictionBaseline: ${predictionBaseline}`)
-        setOpen(false);
-        postConjecture(
-                    {
-                    user_id: localStorage.getItem("loginId").toString(),
-                    conjecture_timestamp: now,
-                    conjecture_amount: conjecture,
-                    game_id: props.gameId,
-                    match_up: `(H) ${props.visuals.home_title} vs ${props.visuals.away_title}`,
-                    baseline_source: source,
-                    conjecture_type: conjectureType,
-                    conjecture_baseline : predictionBaseline,
-                    conjecture_direction: conjectureDirection,
-                    conjecture_status: "Pending"
-                    }
-                    )
-        setRequestSubmitted(true);
-        setShowingAlert(true);
-        resetState();
-    }
-    else {
-        return
-    }
-  };
+  console.log(`tabShown: ${tabShown}`)
 
   return (
     <div>
-      <Button size='small' variant="outlined" onClick={handleClickOpen} >
-        {props.buttonLabel}
-      </Button>
       <Dialog
         open={open}
         onClose={handleClose}
         >
-        <DialogTitle>
-            Create Conjecture
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            <Typography variant="h7" align="center">
-            Select the spread source and type to place a conjecture on
-            </Typography>
-          </DialogContentText>
-              <Box sx={{ maxWidth: 600, maxHeight: 400, margin: 2}}>
-              <Grid container
-                      spacing={1}
-                      direction="row"
-                      style={{
-                        justifyContent: 'space-around',
-                        marginBottom: 20,
-                        marginTop: 10}}
-                        >
-                <Grid item xs={4} >
-                <TeamCard img={props.visuals.home_logo}
-                          title={"(H) " + props.visuals.home_title}
-                          cardMaxWidth={100}
-                          mediaMaxHeight={100}
-                />
-                </Grid>
-                <Grid item xs={4}>
-                <TeamCard img={props.visuals.away_logo}
-                          title={props.visuals.away_title}
-                          cardMaxWidth={100}
-                          mediaMaxHeight={100}
-                />
-                 </Grid>
-              </Grid>
-              <Grid
-                    style={{ display: "flex", gap: "2rem"}}
-                >
-                  <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">source</InputLabel>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={source}
-                      label="Source"
-                      onChange={handleSourceChange}
-                    >
-                      <MenuItem value="Vegas">Vegas</MenuItem>
-                      <MenuItem value="OSTree">OSTree</MenuItem>
-                    </Select>
-                  </FormControl>
-
-                  <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">Spread Type</InputLabel>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={conjectureType}
-                      label="Conjecture Type"
-                      onChange={handleConjectureTypeChange}
-                    >
-                      <MenuItem value="Spread">Spread</MenuItem>
-                      <MenuItem value="Over/Under">Over/Under</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Grid>
-            </Box>
-            <TableContainer component={Paper} sx={{ borderBottom: .5, borderTop: .5,  borderColor: '#62ABB1' }} >
-              <Table align="center" sx={{ minWidth: 100, maxWidth: 300 }} aria-label="simple table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell></TableCell>
-                    {showOst && <TableCell align="center">OSTree Prediction</TableCell>}
-                    {showVegas && <TableCell align="center">Vegas Predition</TableCell>}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                {showSpread && <TableRow
-                      key={standardSpreads.category}
-                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                    >
-                      <TableCell component="th" scope="row">{standardSpreads.category}</TableCell>
-                      {showOst && <TableCell align="center">{standardSpreads.oldst}</TableCell>}
-                      {showVegas && <TableCell align="center">{standardSpreads.vegas}</TableCell>}
-                    </TableRow>}
-                {showOU && <TableRow
-                      key={ouSpreads.category}
-                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                    >
-                      <TableCell component="th" scope="row">{ouSpreads.category}</TableCell>
-                      {showOst && <TableCell align="center">{ouSpreads.oldst}</TableCell>}
-                      {showVegas && <TableCell align="center">{ouSpreads.vegas}</TableCell>}
-                    </TableRow>}
-                </TableBody>
-              </Table>
-              </TableContainer>
-           <Box textAlign="center" sx={{display: 'flex',
-                                       flexDirection: 'row',
-                                        justifyContent: 'space-around',
-                                        maxWidth: 400,
-                                        margin: 2 }}>
-              <TextField
-                autoFocus
-                margin="dense"
-                id="name"
-                inputProps={{min: 0, style: { width: 150, textAlign: 'center' }}}
-                label="Conjecture Amount"
-                type="number"
-                variant="standard"
-                defaultValue="0"
-                onChange={handleConjecture}
-              />
-              {((beatDirections != null) && (coverDirections != null)) &&
-              <RadioGroup
-                aria-labelledby="conjecture-direction-group-label"
-                name="conjecture-direction-group"
-                onChange={handleConjectureDirection}
-              >
-                <FormControlLabel value={coverDirections[0]} control={<Radio />} label={coverDirections[1]} />
-                <FormControlLabel value={beatDirections[0]} control={<Radio />} label={beatDirections[1]} />
-              </RadioGroup>
-              }
+        <Box sx={{ width: '100%' }}>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <Tabs value={tabShown} onChange={changeTab} aria-label="basic tabs example">
+              <Tab label="Place Conjecture" value="conjecture" {...tabProps("conjecture")} />
+              <Tab label="Matchup Details" value="detail" {...tabProps("detail")} />
+            </Tabs>
           </Box>
-          {submitError &&
-                <Alert onClose={() => {setSubmitError(false)}} severity="error">
-                  <AlertTitle>Error</AlertTitle>
-                    {errorMessage}
-                    </Alert>
-           }
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleSubmit}>Place Conjecture</Button>
-        </DialogActions>
+          <TabPanel value={tabShown} index={"conjecture"}>
+            <PlaceConjectureTab
+               visuals={visuals}
+               spreadSummary = {spreadSummary}
+               gameId = {gameId}
+               close = {handleClose}
+               setSubmitted = {setSubmitted}
+            >
+            </PlaceConjectureTab>
+          </TabPanel>
+          <TabPanel value={tabShown} index={"detail"}>
+            <MatchUpDetailsTab
+               visuals={visuals}
+               spreadSummary = {spreadSummary}
+               gameDetails = {gameDetails}
+               close= {handleClose}
+            >
+            </MatchUpDetailsTab>
+          </TabPanel>
+        </Box>
       </Dialog>
-        <Snackbar open={requestSubmitted} autoHideDuration={3000} onClose={() => {setRequestSubmitted(false)}}>
-                  <Alert onClose={() => {setRequestSubmitted(false)}} severity="success" sx={{ width: '100%' }}>
-                    Your conjecture has been submitted!
-                  </Alert>
-        </Snackbar>
     </div>
   )
 }

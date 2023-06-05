@@ -8,9 +8,16 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
 export default function MatchUpTable(props) {
+    const [showLines, setShowLines] = React.useState(props.showLines)
+    const [showDetails, setShowDetails] = React.useState(props.showDetails)
+    const [lineSummary, setLineSummary] = React.useState(props.lineSummary)
+    const [gameDetails, setGameDetails] = React.useState(props.gameDetails)
+
 
     return(
         <div>
+        {props.showLines &&
+                (
         <TableContainer component={Paper} sx={{ justifyContent: 'center', minWidth: "auto", maxWidth: "auto" , borderBottom: .5,  borderColor: 'grey.500' }} >
               <Table aria-label="simple table">
                 <TableHead>
@@ -34,6 +41,8 @@ export default function MatchUpTable(props) {
                 </TableBody>
               </Table>
               </TableContainer>
+                )
+              }
             {props.showDetail &&
                 (
             <TableContainer component={Paper} sx={{ minWidth: "auto", maxWidth: "auto" , borderBottom: .5,  borderColor: 'grey.500' }}>
